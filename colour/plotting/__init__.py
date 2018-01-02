@@ -3,6 +3,10 @@
 
 from __future__ import absolute_import
 
+import sys
+
+from colour.utilities.deprecation import ModuleAPI, Renamed
+
 from .dataset import *  # noqa
 from . import dataset
 from .common import (
@@ -105,3 +109,95 @@ __all__ += [
     'planckian_locus_chromaticity_diagram_plot_CIE1960UCS'
 ]
 __all__ += ['RGB_colourspaces_gamuts_plot', 'RGB_scatter_plot']
+
+
+# ----------------------------------------------------------------------------#
+# ---                API Changes and Deprecation Management                ---#
+# ----------------------------------------------------------------------------#
+class plotting(ModuleAPI):
+    def __getattr__(self, attribute):
+        return super(plotting, self).__getattr__(attribute)
+
+
+_API_CHANGES = {
+    'Renamed': [
+        [
+            'colour.plotting.CIE_1931_chromaticity_diagram_plot',
+            'colour.plotting.chromaticity_diagram_plot_CIE1931',
+        ],
+        [
+            'colour.plotting.CIE_1960_UCS_chromaticity_diagram_plot',
+            'colour.plotting.chromaticity_diagram_plot_CIE1960UCS',
+        ],
+        [
+            'colour.plotting.CIE_1976_UCS_chromaticity_diagram_plot',
+            'colour.plotting.chromaticity_diagram_plot_CIE1976UCS',
+        ],
+        [
+            'colour.plotting.spds_CIE_1931_chromaticity_diagram_plot',
+            'colour.plotting.spds_chromaticity_diagram_plot_CIE1931',
+        ],
+        [
+            'colour.plotting.spds_CIE_1960_UCS_chromaticity_diagram_plot',
+            'colour.plotting.spds_chromaticity_diagram_plot_CIE1960UCS',
+        ],
+        [
+            'colour.plotting.spds_CIE_1976_UCS_chromaticity_diagram_plot',
+            'colour.plotting.spds_chromaticity_diagram_plot_CIE1976UCS',
+        ],
+        [
+            'colour.plotting.'
+            'RGB_colourspaces_CIE_1931_chromaticity_diagram_plot',
+            'colour.plotting.'
+            'RGB_colourspaces_chromaticity_diagram_plot_CIE1931',
+        ],
+        [
+            'colour.plotting.'
+            'RGB_colourspaces_CIE_1960_UCS_chromaticity_diagram_plot',
+            'colour.plotting.'
+            'RGB_colourspaces_chromaticity_diagram_plot_CIE1960UCS',
+        ],
+        [
+            'colour.plotting.'
+            'RGB_colourspaces_CIE_1976_UCS_chromaticity_diagram_plot',
+            'colour.plotting.'
+            'RGB_colourspaces_chromaticity_diagram_plot_CIE1976UCS',
+        ],
+        [
+            'colour.plotting.'
+            'RGB_chromaticity_coordinates_CIE_1931_chromaticity_diagram_plot',
+            'colour.plotting.'
+            'RGB_chromaticity_coordinates_chromaticity_diagram_plot_CIE1931',
+        ],
+        [
+            'colour.plotting.RGB_chromaticity_coordinates_CIE_1960_UCS_chromaticity_diagram_plot',  # noqa
+            'colour.plotting.'
+            'RGB_chromaticity_coordinates_chromaticity_diagram_plot_CIE1960UCS',  # noqa
+        ],
+        [
+            'colour.plotting.RGB_chromaticity_coordinates_CIE_1976_UCS_chromaticity_diagram_plot',  # noqa
+            'colour.plotting.'
+            'RGB_chromaticity_coordinates_chromaticity_diagram_plot_CIE1976UCS',  # noqa
+        ],
+        [
+            'colour.plotting.'
+            'planckian_locus_CIE_1931_chromaticity_diagram_plot',
+            'colour.plotting.'
+            'planckian_locus_chromaticity_diagram_plot_CIE1931',
+        ],
+        [
+            'colour.plotting.'
+            'planckian_locus_CIE_1960_UCS_chromaticity_diagram_plot',
+            'colour.plotting.'
+            'planckian_locus_chromaticity_diagram_plot_CIE1960UCS',
+        ],
+    ]
+}
+
+for renamed in _API_CHANGES['Renamed']:
+    name, access = renamed
+    _API_CHANGES[name.split('.')[-1]] = (Renamed(name, access))
+_API_CHANGES.pop('Renamed')
+
+sys.modules['colour.plotting'] = plotting(sys.modules['colour.plotting'],
+                                          _API_CHANGES)
